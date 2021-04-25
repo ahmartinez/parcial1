@@ -92,7 +92,7 @@ void loop()
 {
 
 
-  if (Serial.available() > 0 )
+  if (Serial.available())
   {
     opcion = Serial.parseInt();
     switch(opcion)
@@ -104,11 +104,12 @@ void loop()
       menu();
       break;
       case 2:
-      opcion_secuencia = 0;
       Serial.println("Digite fila 1 del patron 1");
       imagen(0);
       menu();
+      opcion_secuencia = 0;
       num_patrones = 1;
+      patron_actual=0;
       break;
       case 3:
       opcion_secuencia = 0;
@@ -245,9 +246,10 @@ void presentar_imagen(int posicion)
         desplazar_registro(patrones_predeterminados[posicion][fila]);
       }
     }
+
+    digitalWrite(RCLK, 0);
+    digitalWrite(RCLK, 1);
   }
-  digitalWrite(RCLK, 0);
-  digitalWrite(RCLK, 1);
 
 }
 
