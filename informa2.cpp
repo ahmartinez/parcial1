@@ -4,7 +4,7 @@ const int SRCLK = 5; // Shift Register Clock en pin 5
 
 
 bool matrices[5][8][8];
-
+bool patrones_predeterminados[4][8][8]=
 
 void setup()
 {
