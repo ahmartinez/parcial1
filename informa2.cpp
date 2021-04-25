@@ -2,6 +2,11 @@ const int SER = 2; //  Serial input en pin 2
 const int RCLK = 4; // Output Register Clock en pin 4
 const int SRCLK = 5; // Shift Register Clock en pin 5
 
+int opcion;
+int num_patrones = 0, patron_actual = 0;
+int duracion = 0;
+bool opcion_secuencia = 0;
+
 
 bool matrices[5][8][8];
 bool patrones_predeterminados[4][8][8] =
@@ -55,7 +60,7 @@ bool patrones_predeterminados[4][8][8] =
     {0,0,0,0,0,0,0,0}
 
   }
-}
+};
 
 
 
@@ -77,15 +82,15 @@ void menu()
   Serial.println("Digite una opcion: \n \
     1. Verifiacion \n \
     2. Ingresar y mostrar un patron \n \
-    3. Ingresar y mostrar secuencia de patrones" );
+    3. Ingresar y mostrar secuencia de patrones \n \
+    4. Usar secuencia predeterminada" );
+
 }
 
 
 void loop()
 {
-  int opcion;
-  int num_patrones = 0, patron_actual = 0;
-  int duracion = 0;
+
 
   if (Serial.available() > 0 )
   {
@@ -99,17 +104,26 @@ void loop()
       menu();
       break;
       case 2:
+      opcion_secuencia = 0;
       Serial.println("Digite fila 1 del patron 1");
       imagen(0);
       menu();
       num_patrones = 1;
       break;
       case 3:
+      opcion_secuencia = 0;
       publik(duracion, num_patrones);
       menu();
       break;
+      case 4:
+      opcion_secuencia = 1;
+      num_patrones = 4;
+      duracion = 300;
+      patron_actual = 0;
+      break;
     }
   }
+
 
   presentar_imagen(patron_actual);
   delay(duracion);
@@ -219,9 +233,18 @@ void desplazar_registro(bool *registro)
 
 void presentar_imagen(int posicion)
 {
-  for (int fila=7 ; fila>=0 ; fila--)
+  if(num_patrones!=0)
   {
-    desplazar_registro(matrices[posicion][fila]);
+    for (int fila=7 ; fila>=0 ; fila--)
+    {
+      if (opcion_secuencia == 0){
+
+        desplazar_registro(matrices[posicion][fila]);
+      }
+      else {
+        desplazar_registro(patrones_predeterminados[posicion][fila]);
+      }
+    }
   }
   digitalWrite(RCLK, 0);
   digitalWrite(RCLK, 1);
