@@ -8,7 +8,7 @@ int duracion = 0;
 bool opcion_secuencia = 0;
 
 
-bool matrices[5][8][8];
+bool patrones_usuario[5][8][8];
 bool patrones_predeterminados[4][8][8] =
 {
   {
@@ -102,7 +102,7 @@ void loop()
       verificacion(0);
       menu();
       break;
-      
+
       case 2:
       opcion_secuencia = 0;
       patron_actual = 0;
@@ -111,7 +111,7 @@ void loop()
       imagen(0);
       menu();
       break;
-      
+
       case 3:
       opcion_secuencia = 0;
       patron_actual = 0;
@@ -119,7 +119,7 @@ void loop()
       publik();
       menu();
       break;
-      
+
       case 4:
       opcion_secuencia = 1;
       patron_actual = 0;
@@ -132,7 +132,7 @@ void loop()
 
 
   presentar_imagen(patron_actual);
-  
+
   // Verbose - comentar
   /*
   Serial.print("Duracion: ");
@@ -142,7 +142,7 @@ void loop()
   Serial.print(", Patron actual: ");
   Serial.println(patron_actual);
   */
-  
+
   delay(duracion);
   patron_actual++;
   if ( patron_actual == num_patrones)
@@ -179,8 +179,8 @@ void imagen(int posicion) // Esto era antes captura_matriz, pero bueno...
       for (int col = 0 ; col<8 ; col++)
       {
         temp = entrada.substring(col,col+1);
-        matrices[posicion][fila][col] = temp.toInt();
-        Serial.print(matrices[posicion][fila][col]);
+        patrones_usuario[posicion][fila][col] = temp.toInt();
+        Serial.print(patrones_usuario[posicion][fila][col]);
       }
       Serial.print("\n");
       fila++;
@@ -204,7 +204,7 @@ void publik()
   Serial.println("Digite el numero de patrones a secuenciar:");
   while (1)
   {
-    if (Serial.available() > 0 || estado==3)
+    if (Serial.available() > 0)
     {
       if (estado == 0 )
       {
@@ -219,25 +219,26 @@ void publik()
         Serial.println(duracion);
         estado = 2;
         Serial.println("Digite a continuacion los patrones:");
-        Serial.print("Digite fila 1 del patron 1");
+        Serial.println("Digite fila 1 del patron 1");
       }
       else if ( estado == 2)
       {
         for ( int posicion = 0 ; posicion < num_patrones ;  posicion++)
         {
           imagen(posicion);
-          if(posicion!=num_patrones-1){
+          if(posicion != num_patrones-1)
+          {
             Serial.print("Digite fila 1 del patron ");
             Serial.println(posicion+2);
           }
         }
         estado = 3;
       }
-      else if ( estado == 3)
+      if ( estado == 3)
       {
         //Serial.println("Sali");
         break;
-        
+
       }
     }
   }
@@ -245,17 +246,19 @@ void publik()
 
 
 
-void desplazar_registro(bool *registro)
+void desplazar_registro(bool *fila)
+// void desplazar_registro(bool fila[8])  
+  
 {
-  for (int i=7 ; i>=0 ; i--)
+  for (int col=7 ; col>=0 ; col--)
   {
-    digitalWrite(SER, registro[i]);
+    digitalWrite(SER, fila[col]);
     digitalWrite(SRCLK, 0);
     digitalWrite(SRCLK, 1);
   }
 }
 
-void presentar_imagen(int posicion)
+void presentar_imagen(int patron)
 {
   if(num_patrones!=0)
   {
@@ -263,10 +266,10 @@ void presentar_imagen(int posicion)
     {
       if (opcion_secuencia == 0){
 
-        desplazar_registro(matrices[posicion][fila]);
+        desplazar_registro(patrones_usuario[patron][fila]);
       }
       else {
-        desplazar_registro(patrones_predeterminados[posicion][fila]);
+        desplazar_registro(patrones_predeterminados[patron][fila]);
       }
     }
 
