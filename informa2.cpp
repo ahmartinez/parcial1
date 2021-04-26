@@ -7,8 +7,43 @@ int num_patrones = 0, patron_actual = 0;
 int duracion = 0;
 bool opcion_secuencia = 0;
 
+// Mientras tanto, sin memoria dinamica, maximo 5 patrones:
+// bool patrones_usuario[5][8][8];
 
-bool patrones_usuario[5][8][8];
+// Con memoria dinámica:
+bool ***patrones_usuario;
+
+void reservar_memoria(int n) // n = número patrones que quiere el usuario
+{
+  // Reservar memoria para n patrones
+  patrones_usuario = new bool **[n];
+  for (int patron = 0 ; patron < n ; patron++)
+  {
+    // Reservar memoria para 8 filas
+    patrones_usuario[patron] = new bool *[8];
+    for (int fila = 0 ; fila < 8 ; fila++)
+    {
+      // Reservar memoria para 8 columnas
+      patrones_usuario[patron][fila] = new bool[8];
+    }
+  }
+}
+
+void liberar_memoria(int n) // liberar memoria :P
+{
+  for (int patron = 0 ; patron < n ; patron++)
+  {
+    for (int fila = 0 ; fila < 8 ; fila++)
+    {
+      delete[] patrones_usuario[patron][fila];
+    }
+    delete[] patrones_usuario[patron];
+  }
+}
+
+
+// fin memoria dinámica
+
 bool patrones_predeterminados[4][8][8] =
 {
   {
@@ -104,9 +139,11 @@ void loop()
       break;
 
       case 2:
+      liberar_memoria(num_patrones);
       opcion_secuencia = 0;
       patron_actual = 0;
       num_patrones = 1;
+      reservar_memoria(num_patrones);
       Serial.println("Digite fila 1 del patron 1");
       imagen(0);
       menu();
@@ -200,6 +237,7 @@ void imagen(int posicion) // Esto era antes captura_matriz, pero bueno...
 //void publik(int &duracion, int &num_patrones)
 void publik()
 {
+  liberar_memoria(num_patrones);
   int estado = 0;
   Serial.println("Digite el numero de patrones a secuenciar:");
   while (1)
@@ -210,6 +248,7 @@ void publik()
       {
         num_patrones = Serial.parseInt();
         Serial.println(num_patrones);
+        reservar_memoria(num_patrones);
         estado = 1;
         Serial.println("Digite la duracion (ms) entre visualizaciones:");
       }
