@@ -127,6 +127,11 @@ void loop()
 
 
   presentar_imagen(patron_actual);
+  Serial.print("Duracion: ");
+  Serial.print(duracion);
+  Serial.print(", Numero de Patrones: ");
+  Serial.print(num_patrones);
+
   delay(duracion);
   patron_actual++;
   if ( patron_actual == num_patrones)
