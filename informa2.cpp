@@ -103,35 +103,46 @@ void loop()
       verificacion(0);
       menu();
       break;
+      
       case 2:
+      opcion_secuencia = 0;
+      patron_actual = 0;
+      num_patrones = 1;
       Serial.println("Digite fila 1 del patron 1");
       imagen(0);
       menu();
-      opcion_secuencia = 0;
-      num_patrones = 1;
-      patron_actual=0;
       break;
+      
       case 3:
       opcion_secuencia = 0;
+      patron_actual = 0;
       publik(duracion, num_patrones);
       menu();
       break;
+      
       case 4:
       opcion_secuencia = 1;
+      patron_actual = 0;
       num_patrones = 4;
       duracion = 300;
-      patron_actual = 0;
+      menu();
       break;
     }
   }
 
 
   presentar_imagen(patron_actual);
+  
+  // Verbose - comentar
+  
   Serial.print("Duracion: ");
   Serial.print(duracion);
   Serial.print(", Numero de Patrones: ");
   Serial.print(num_patrones);
-
+  Serial.print(", Patron actual: ");
+  Serial.println(patron_actual);
+  
+  
   delay(duracion);
   patron_actual++;
   if ( patron_actual == num_patrones)
@@ -214,13 +225,17 @@ void publik(int &duracion, int &num_patrones)
         for ( int posicion = 0 ; posicion < num_patrones ;  posicion++)
         {
           imagen(posicion);
-          Serial.print("Digite fila 1 del patron ");
-          Serial.println(posicion+1);
+          //Serial.print("Digite fila 1 del patron ");
+          //Serial.println(posicion+1);
         }
         estado = 3;
       }
       else if ( estado == 3)
+      {
+        Serial.println("Sali");
         break;
+        
+      }
     }
   }
 }
