@@ -38,8 +38,24 @@
 
 \tableofcontents
 \newpage
-\section{Sección introductoria}\label{intro}
-Esta es la primera sección, podemos agregar algunos elementos adicionales y todo será escrito correctamente. Más aún, si una palabra es demasiado larga y tiene que ser truncada, babel tratará de truncarla correctamente dependiendo del idioma.
+\section{Análisis del problema y consideraciones para la alternativa de solución propuesta}\label{analisis}
+
+\subsection{Problema}
+
+El problema planetado para el parcial 1, consiste en la impleentación de un display LED en un arreglo de 8 x 8, utilizando el circuito integrado (IC) 74HC595 y el mínimo posible de pines de salida de un dispositivo Arduino.
+
+El programa a implementar deberá permitir que un usuario ingrese a través de la consola serial un número arbitrario de patrones, los cuales se presentarán de forma secuencial en el display. Adicionalmente, el programa deberá permitir la verificación del funcionamiento del display
+
+\subsection{Solución propuesta}
+
+El IC 74HC595 tiene una entrada serial y dos relojes. A través de la entrada serial se puede ingresar secuencias de 8 bits al IC, el cual  tiene una salida paralela de ocho bits, que se puede utilizar para activar una línea de LED.
+
+La última salida de este IC, está destinada para conectar en serie otros IC. Por lo tanto, es posible conectar la salida serial de un IC a la entrada serial de otro, permitiendo multiplicar la salida en paralelo. De esta forma, es posible conectar ocho IC en serie utilzindo un solo pin de salida del Arduino. 
+Los relojes no requieren ser puestos en serie, sino que se conectan a un mismo bus en paralelo en cada IC. 
+
+Así, solamente se utilizan sólamente tres pines de salida del Arduino.
+
+
 
 \section{Sección de contenido} \label{contenido}
 Esta sección es para agregar toda la información correspondiente con código, citas, etc.
@@ -100,7 +116,7 @@ En la Figura (\ref{fig:cpplogo}), se presenta el logo de C++ contenido en la car
 \label{fig:cpplogo}
 \end{figure}
 
-Las secciones (\ref{intro}), (\ref{contenido}) y (\ref{imagenes}) dependen del estilo del documento.
+Las secciones (\ref{analisis}), (\ref{contenido}) y (\ref{imagenes}) dependen del estilo del documento.
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
